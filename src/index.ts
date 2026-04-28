@@ -3,21 +3,13 @@ import { config } from './config/config';
 import { cors } from 'hono/cors'
 import { BaseException } from './helpers/exception';
 import { ApiResponse } from './helpers/response';
-import { AuthController } from './controller/auth.controller';
-import { authMiddleware } from './middleware/auth.middleware';
-import type { Variables } from './helpers/types';
+import apiRouter from './routes/api';
 
-const app = new Hono<{ Variables: Variables }>()
+const app = new Hono()
 app.use('*', cors())
 
-const authController = new AuthController()
+app.route('/api', apiRouter)
 
-app.post('/auth/google', (c) => authController.google(c))
-app.get('/auth/me', authMiddleware, (c) => authController.me(c))
-app.post('/auth/logout', authMiddleware, (c) => authController.logout(c))
-app.get('/', authMiddleware, (c) => {
-    return c.text('Hello Hono!')
-})
 
 // Global Error Handler
 app.onError((err, c) => {

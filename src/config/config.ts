@@ -17,5 +17,13 @@ export const config = {
     google: {
         clientId: process.env.GOOGLE_CLIENT_ID || '',
         clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+    },
+    minio: {
+        endpoint: process.env.MINIO_STORAGE_ENDPOINT || '',
+        port: Number(process.env.MINIO_STORAGE_PORT) || 9000,
+        useSSL: process.env.MINIO_STORAGE_SSL === 'true',
+        accessKey: process.env.MINIO_STORAGE_KEY || '',
+        secretKey: process.env.MINIO_STORAGE_SECRET || '',
+        bucketName: process.env.MINIO_STORAGE_BUCKET || '',
     }
 }
