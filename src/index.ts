@@ -31,9 +31,10 @@ app.onError((err, c) => {
 })
 
 
-export default {
+const server = Bun.serve({
   port: config.app.port,
+  hostname: '0.0.0.0',
   fetch: app.fetch,
-};
+});
 
-console.log(`🚀 Server running on http://localhost:${config.app.port}`);
+console.log(`🚀 Server running on http://localhost:${server.port}`);
