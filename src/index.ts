@@ -4,8 +4,10 @@ import { cors } from 'hono/cors'
 import { BaseException } from './helpers/exception';
 import { ApiResponse } from './helpers/response';
 import apiRouter from './routes/api';
+import { checkDatabaseConnection } from './config/database';
 
 const app = new Hono()
+checkDatabaseConnection()
 app.use('*', cors())
 
 app.route('/api', apiRouter)

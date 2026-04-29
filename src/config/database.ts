@@ -10,3 +10,12 @@ export const pool: Pool = createPool({
     waitForConnections: true,
     queueLimit: 0,
 })
+
+export async function checkDatabaseConnection() {
+    try {
+        await pool.query('SELECT 1')
+        console.log('Database connection successful')
+    } catch (error) {
+        console.error('Database connection failed:', error)
+    }
+}
