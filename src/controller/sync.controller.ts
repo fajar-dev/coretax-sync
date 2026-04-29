@@ -1,19 +1,42 @@
 import type { Context } from "hono"
 import { ApiResponse } from "../helpers/response"
 import { BadRequestException } from "../helpers/exception"
-import { uploadFile } from "../service/storage.service"
+import { StorageService } from "../service/storage.service"
+import { NisService } from "../service/nis.service"
+import { NusaworkService } from "../service/nusawork.service"
 
 export class SyncController {
-    async sync(c: Context) {
-        const body = await c.req.parseBody()
-        const file = body["file"]
+    private readonly storageService: StorageService
+    private readonly nisService: NisService
+    private readonly nusaworkService: NusaworkService
 
-        if (!file || !(file instanceof File)) {
-            throw new BadRequestException("file is required")
+    constructor(storageService: StorageService, nisService: NisService, nusaworkService: NusaworkService) {
+        this.storageService = storageService
+        this.nisService = nisService
+        this.nusaworkService = nusaworkService
+    }
+
+    async sync(c: Context) {
+        const user = c.get("user")
+        const body = await c.req.parseBody({ all: true })
+        const files = body["files"]
+
+        const fileArray = Array.isArray(files) ? files : files ? [files] : []
+
+        if (fileArray.length === 0 || !fileArray.every(f => f instanceof File)) {
+            throw new BadRequestException("at least one file is required")
         }
 
-        const result = await uploadFile(file, "sync", true)
+        const time = Date.now()
+        const employee = await this.nusaworkService.getEmployeeByEmail(user.email)
+        const results = await Promise.all(
+            fileArray.map(async (file) => {
+                const result = await this.storageService.uploadFile(file as File, "bupot-pph23", true)
+                await this.nisService.insertBupot(result.objectName, time, employee.employee_id)
+                return result
+            })
+        )
 
-        return ApiResponse.success(c, result, "File uploaded successfully")
+        return ApiResponse.success(c, results, "Files uploaded successfully")
     }
 }

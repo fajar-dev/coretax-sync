@@ -25,5 +25,10 @@ export const config = {
         accessKey: process.env.MINIO_STORAGE_KEY || '',
         secretKey: process.env.MINIO_STORAGE_SECRET || '',
         bucketName: process.env.MINIO_STORAGE_BUCKET || '',
+    },
+    nusawork: {
+        apiUrl: process.env.NUSAWORK_API_URL || '',
+        clientId: process.env.NUSAWORK_CLIENT_ID || '',
+        clientSecret: process.env.NUSAWORK_CLIENT_SECRET || '',
     }
 }

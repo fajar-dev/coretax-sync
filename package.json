@@ -4,6 +4,7 @@
     "dev": "bun run --hot src/index.ts"
   },
   "dependencies": {
+    "axios": "^1.15.2",
     "google-auth-library": "^10.6.2",
     "hono": "^4.12.15",
     "minio": "^8.0.7",
