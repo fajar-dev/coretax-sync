@@ -29,10 +29,14 @@ export class SyncController {
 
         const time = Date.now()
         const employee = await this.nusaworkService.getEmployeeByEmail(user.email)
+        
         const results = await Promise.all(
             fileArray.map(async (file) => {
                 const result = await this.storageService.uploadFile(file as File, "bupot-pph23", true)
-                await this.nisService.insertBupot(result.objectName, time, employee.employee_id)
+                const existingBupot = await this.nisService.getBupotByFileName(result.objectName)
+                if (!existingBupot) {
+                    await this.nisService.insertBupot(result.objectName, time, employee.employee_id)
+                }
                 return result
             })
         )

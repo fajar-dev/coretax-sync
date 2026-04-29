@@ -16,4 +16,12 @@ export class NisService {
 
         return result
     }
+
+    async getBupotByFileName(fileName: string) {
+        const [rows]: any = await pool.query(
+            `SELECT * FROM Pph23BuktiPotong WHERE fileName = ?`,
+            [fileName]
+        )
+        return rows[0] ?? null
+    }
 }
