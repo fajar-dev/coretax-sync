@@ -1,6 +1,6 @@
 import type { Context } from "hono"
 import { ApiResponse } from "../helpers/response"
-import { BadRequestException } from "../helpers/exception"
+import { BadRequestException, NotFoundException } from "../helpers/exception"
 import { StorageService } from "../service/storage.service"
 import { NisService } from "../service/nis.service"
 import { NusaworkService } from "../service/nusawork.service"
@@ -29,6 +29,9 @@ export class SyncController {
 
         const time = Date.now()
         const employee = await this.nusaworkService.getEmployeeByEmail(user.email)
+        if (!employee) {
+            throw new NotFoundException("employee not found")
+        }
         
         const results = await Promise.all(
             fileArray.map(async (file) => {
