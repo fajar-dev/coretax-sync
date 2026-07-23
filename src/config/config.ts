@@ -17,6 +17,7 @@ export const config = {
     google: {
         clientId: process.env.GOOGLE_CLIENT_ID || '',
         clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+        allowedDomain: process.env.GOOGLE_ALLOWED_DOMAIN || 'nusa.id',
     },
     minio: {
         endpoint: process.env.MINIO_STORAGE_ENDPOINT || '',

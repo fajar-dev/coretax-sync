@@ -1,6 +1,7 @@
 import type { Context, Next } from "hono"
 import { AuthService } from "../service/auth.service"
 import { UnauthorizedException } from "../helpers/exception"
+import { config } from "../config/config"
 
 const authService = new AuthService()
 
@@ -14,7 +15,7 @@ export async function authMiddleware(c: Context, next: Next) {
     const token = authorization.slice(7)
     const payload = await authService.verifyGoogleToken(token)
 
-    if (payload.hd !== "nusa.net.id") {
+    if (payload.hd !== config.google.allowedDomain) {
         throw new UnauthorizedException("Invalid Google account")
     }
 

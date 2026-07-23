@@ -62,7 +62,7 @@ export class AuthService {
 
         const payload = await this.verifyGoogleToken(credential)
 
-        if (payload.hd !== "nusa.id") {
+        if (payload.hd !== config.google.allowedDomain) {
             throw new UnauthorizedException("Invalid access")
         }
 
